@@ -1,0 +1,4 @@
+# Pin heavy libs here if you face platform issues. Example:
+# torch==2.4.0+cpu     # (Use official CPU wheels if needed)
+# transformers==4.44.2
+# sentence-transformers==3.0.1
