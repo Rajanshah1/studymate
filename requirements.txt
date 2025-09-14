@@ -18,7 +18,6 @@ spacy>=3.7.2
 
 # Optional: neural QG (falls back to templates if unavailable)
 transformers>=4.42.0
-torch>=2.3.0
 
 # App
 streamlit>=1.36.0
