@@ -1,7 +1,7 @@
 ir:
   chunk_size: 500          # characters per chunk (approx)
   chunk_overlap: 50
-  alpha_bm25: 0.5          # weight for BM25 vs embedding similarity
+  alpha_bm25: 1.0          # weight for BM25 vs embedding similarity
   top_k: 10
 nlp:
   spacy_model: en_core_web_sm
