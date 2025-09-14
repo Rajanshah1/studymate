@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "studymate"
+version = "0.1.0"
+description = "StudyMate IR/NLP utilities"
+requires-python = ">=3.10"
+
+[tool.setuptools.packages.find]
+include = ["sm"]
+
