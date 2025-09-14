@@ -12,3 +12,5 @@ __pycache__/
 # Data / build artifacts (keep source code small)
 data/**/*.pdf
 data/index/
+
+!data/raw/*.pdf
