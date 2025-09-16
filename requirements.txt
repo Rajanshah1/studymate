@@ -10,7 +10,8 @@ beautifulsoup4>=4.12.0
 
 # IR
 rank-bm25>=0.2.2
-faiss-cpu>=1.8.0
+# faiss-cpu==1.7.4
+faiss-cpu
 
 # Embeddings & NLP
 sentence-transformers>=3.0.0

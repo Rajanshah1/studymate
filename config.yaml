@@ -1,13 +1,21 @@
+paths:
+  chunks_csv: data/processed/chunks.csv
+  index_dir: data/index
+
 ir:
-  chunk_size: 500          # characters per chunk (approx)
-  chunk_overlap: 50
-  alpha_bm25: 1.0          # weight for BM25 vs embedding similarity
-  top_k: 10
+  chunk_size: 500
+  chunk_overlap: 100
+  top_k: 12
+  alpha_bm25: 1.0   # 1.0=BM25-only; 0.0=Embeddings-only; 0.5=Hybrid
+
+embedding:
+  model: sentence-transformers/all-MiniLM-L6-v2
+  use_faiss: true
+  faiss_nprobe: 8
+
+qg:
+  use_transformers: false   # Week 2 = template QG
+  model_name: t5-small
+
 nlp:
   spacy_model: en_core_web_sm
-qg:
-  use_transformers: true   # if model fails to load, falls back to templates
-  model_name: t5-small
-app:
-  index_dir: data/index
-  processed_csv: data/processed/chunks.csv

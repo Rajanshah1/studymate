@@ -1,41 +1,60 @@
-import argparse, pickle, json
-from sm.utils import read_config
-from sm.nlp import extract_key_terms, qg_templates, qg_transformers
+#!/usr/bin/env python3
+import re, argparse
+
+SENT_SPLIT = re.compile(r'(?<=[.!?])\s+')
+
+def pick_terms(text, max_terms=3):
+    tokens = re.findall(r"[A-Za-z][A-Za-z\-]{2,}", text or "")
+    seen, terms = set(), []
+    for t in sorted(tokens, key=len, reverse=True):
+        k = t.lower()
+        if k in seen: 
+            continue
+        if k.endswith(("ly", "ing", "tion", "sion")):
+            continue
+        seen.add(k); terms.append(t)
+        if len(terms) >= max_terms:
+            break
+    return terms
+
+def cloze(text):
+    terms = pick_terms(text, 1)
+    if not terms: return None
+    t = terms[0]
+    return f"Fill in the blank: {text.replace(t, '_____')}", t
+
+def define(text):
+    m = re.search(r"\b([A-Z][A-Za-z0-9\- ]{2,20})\s+is\b", text)
+    if not m: return None
+    subj = m.group(1).strip()
+    return f"What is {subj}?", subj
+
+def why(text):
+    if "because" in (text or "").lower():
+        return "Why does the text say this occurs?", None
+    return None
+
+def generate_from_chunk(chunk_text, n=3):
+    text = (chunk_text or "").strip()
+    sent = SENT_SPLIT.split(text)[0][:300] if text else ""
+    qs = []
+    for maker in (define, cloze, why):
+        q = maker(sent)
+        if q: qs.append(q)
+        if len(qs) >= n: break
+    while len(qs) < n:
+        qs.append((f"According to the text, what does this describe?\n“{sent}”", None))
+    return qs
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--index', default='data/index/hybrid.pkl')
-    ap.add_argument('--topn', type=int, default=5, help='Use top-N retrieved chunks as seeds')
-    ap.add_argument('--query', default='', help='Optional query to focus retrieval before QG')
-    ap.add_argument('--config', default='config.yaml')
+    ap.add_argument("--text", required=True, help="Chunk text to turn into questions")
+    ap.add_argument("-n", type=int, default=3, help="How many questions")
     args = ap.parse_args()
+    for i, (q, ans) in enumerate(generate_from_chunk(args.text, args.n), 1):
+        print(f"{i}. {q}")
+        if ans: print(f"   (answer: {ans})")
 
-    cfg = read_config(args.config)
-    with open(args.index, 'rb') as f:
-        payload = pickle.load(f)
-    retriever = payload['retriever']; df = payload['df']
-
-    # choose seeds
-    if args.query:
-        hits = retriever.search(args.query, k=args.topn, alpha_bm25=cfg['ir']['alpha_bm25'])
-        seeds = [df.iloc[i]['text'] for i,_ in hits]
-    else:
-        seeds = df['text'].head(args.topn).tolist()
-
-    questions = []
-    for s in seeds:
-        terms = extract_key_terms(s, cfg['nlp']['spacy_model'])
-        # Try transformers QG first (if enabled), otherwise use templates
-        generated = []
-        if cfg['qg']['use_transformers']:
-            generated = qg_transformers(s, cfg['qg']['model_name'])
-        if not generated:
-            generated = qg_templates(s, terms)
-        for g in generated:
-            g['terms'] = terms
-        questions.extend(generated)
-
-    print(json.dumps(questions, indent=2))
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
+

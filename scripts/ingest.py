@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import os
+import os, glob
 import argparse
 import pandas as pd
 
@@ -24,7 +24,7 @@ def pdf_to_text(path: str) -> str:
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--input", required=True, help="Path to PDF or TXT")
+    ap.add_argument("--input", required=True, help="Path to PDF/TXT or a glob pattern like data/raw/*.pdf")
     ap.add_argument("--output", default="data/processed/chunks.csv")
     ap.add_argument("--config", default="config.yaml")
     ap.add_argument("--min-tokens", type=int, default=0,
@@ -37,29 +37,36 @@ def main():
     chunk_size = int(ir_cfg.get("chunk_size", 800))
     overlap = int(ir_cfg.get("chunk_overlap", 120))
 
-    # Read source text
-    src_path = os.path.abspath(args.input)
-    if args.input.lower().endswith(".pdf"):
-        text = pdf_to_text(src_path)
-    else:
-        with open(src_path, "r", encoding="utf-8", errors="ignore") as f:
-            text = f.read()
+    # Expand glob(s) into file list
+    files = []
+    for pattern in args.input.split():
+        files.extend(glob.glob(pattern))
+    if not files:
+        raise FileNotFoundError(f"No files matched pattern(s): {args.input}")
 
-    # Clean + chunk
-    text = clean_text(text or "")
-    chunks = chunk_text(text, chunk_size, overlap)
-
-    # Stable IDs: one per document, chunk_id per chunk
-    doc_id = stable_id(src_path)  # deterministic per file path
     rows = []
-    for i, ch in enumerate(chunks):
-        rows.append({
-            "chunk_id": f"{doc_id}-{i:04d}",
-            "doc_id": doc_id,
-            "chunk_idx": i,
-            "source": src_path,
-            "text": ch,
-        })
+    for src_path in files:
+        abs_path = os.path.abspath(src_path)
+        if abs_path.lower().endswith(".pdf"):
+            text = pdf_to_text(abs_path)
+        else:
+            with open(abs_path, "r", encoding="utf-8", errors="ignore") as f:
+                text = f.read()
+
+        # Clean + chunk
+        text = clean_text(text or "")
+        chunks = chunk_text(text, chunk_size, overlap)
+
+        # Stable IDs: one per document, chunk_id per chunk
+        doc_id = stable_id(abs_path)  # deterministic per file path
+        for i, ch in enumerate(chunks):
+            rows.append({
+                "chunk_id": f"{doc_id}-{i:04d}",
+                "doc_id": doc_id,
+                "chunk_idx": i,
+                "source": abs_path,
+                "text": ch,
+            })
 
     # Build DataFrame
     df = pd.DataFrame(rows)
