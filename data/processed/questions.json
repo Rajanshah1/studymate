@@ -1,0 +1,74 @@
+[
+  {
+    "id": "q0001",
+    "chunk_id": "857aad1219c551fd-6064",
+    "source": "/Users/ananniyashah/studymate/data/raw/lecture1.pdf",
+    "question": "to be sufficiently expressive to capture the complexity of real-world data for many important kinds of learning problems.",
+    "answer": "",
+    "context": "to be sufﬁciently expressive to capture the complexity of real-world data for many important kinds of learning problems.",
+    "query": "neural networks"
+  },
+  {
+    "id": "q0002",
+    "chunk_id": "857aad1219c551fd-6353",
+    "source": "/Users/ananniyashah/studymate/data/raw/lecture1.pdf",
+    "question": "Yann LeCun and collaborators showed how to apply back-propagation",
+    "answer": "",
+    "context": "effective training algorithm for such networks had to wait until Yann LeCun and collaborators showed how to apply back-propagation (LeCun et al., 1995).",
+    "query": "neural networks"
+  },
+  {
+    "id": "q0003",
+    "chunk_id": "857aad1219c551fd-6176",
+    "source": "/Users/ananniyashah/studymate/data/raw/lecture1.pdf",
+    "question": "is evolving rapidly, so any additional specifics we might provide would probably be outdated before reaching printed form",
+    "answer": "",
+    "context": "is evolving rapidly, so any additional speciﬁcs we might provide would probably be outdated before reaching printed form.",
+    "query": "neural networks"
+  },
+  {
+    "id": "q0004",
+    "chunk_id": "857aad1219c551fd-6069",
+    "source": "/Users/ananniyashah/studymate/data/raw/lecture1.pdf",
+    "question": "feedforward networks",
+    "answer": "",
+    "context": "example of feedforward networks.",
+    "query": "neural networks"
+  },
+  {
+    "id": "q0005",
+    "chunk_id": "857aad1219c551fd-6060",
+    "source": "/Users/ananniyashah/studymate/data/raw/lecture1.pdf",
+    "question": "According to the text, what does this describe?\n“omputational circuits.”",
+    "answer": "",
+    "context": "omputational circuits.",
+    "query": "neural networks"
+  },
+  {
+    "id": "q0006",
+    "chunk_id": "857aad1219c551fd-6334",
+    "source": "/Users/ananniyashah/studymate/data/raw/lecture1.pdf",
+    "question": "active area of research.",
+    "answer": "",
+    "context": "y active area of research.",
+    "query": "neural networks"
+  },
+  {
+    "id": "q0007",
+    "chunk_id": "857aad1219c551fd-6204",
+    "source": "/Users/ananniyashah/studymate/data/raw/lecture1.pdf",
+    "question": "not_duplicate",
+    "answer": "",
+    "context": "nd the types of node in each layer.6 Some neural network architectures are explicitly designed to generalize well on particular types of data: convolutional networks encode the idea that the same feature extractor is useful at all locations across a spatial grid, and recurrent networks encode the idea that the same update rule is useful at all points in a stream of sequential data.",
+    "query": "neural networks"
+  },
+  {
+    "id": "q0008",
+    "chunk_id": "857aad1219c551fd-6129",
+    "source": "/Users/ananniyashah/studymate/data/raw/lecture1.pdf",
+    "question": "l",
+    "answer": "",
+    "context": "l subunits: edges, corners, ellipses, eyes, faces—cats.",
+    "query": "neural networks"
+  }
+]

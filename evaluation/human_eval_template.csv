@@ -1,0 +1,2 @@
+question_id,question_text,clarity(1-5),relevance(1-5),difficulty(1-5),comments
+q0001,What is gradient descent?,,,,

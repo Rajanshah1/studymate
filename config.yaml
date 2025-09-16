@@ -14,8 +14,11 @@ embedding:
   faiss_nprobe: 8
 
 qg:
-  use_transformers: false   # Week 2 = template QG
+  use_transformers: true
   model_name: t5-small
+  max_new_tokens: 48
+  num_beams: 4
+  no_repeat_ngram_size: 3
 
 nlp:
   spacy_model: en_core_web_sm
