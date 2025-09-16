@@ -50,27 +50,26 @@ python -m spacy download en_core_web_sm
 ```
 
 ## ✨ Quick Start (CLI)
-```bash
-# Convert a PDF or .txt to chunks
-python scripts/ingest.py --input data/raw/lecture1.pdf --output data/processed/chunks.csv
+# 0) deps (with FAISS pinned)
+printf "faiss-cpu==1.7.4\n" > constraints.txt
+pip install -r requirements.txt -c constraints.txt
 
-# Build a local hybrid index
+# 1) ingest
+python scripts/ingest.py --input "data/raw/*.pdf" --output data/processed/chunks.csv
+
+# 2) index
 python scripts/index_local.py --data data/processed/chunks.csv --index-dir data/index
+# Expect: Built hybrid index for N chunks -> data/index/hybrid.pkl
 
-# Search
-python scripts/search.py -q "gradient descent vs backpropagation" -k 5
+# 3) search (CLI)
+python scripts/search.py -q "topic A vs topic B" -k 5
 
-# Generate questions (focused by query)
-python scripts/generate_questions.py --index data/index/hybrid.pkl --query "neural networks" --topn 8 > questions.json
+# 4) QG from index (CLI)
+python scripts/qg_from_index.py --query "graph traversal vs shortest path" --topn 5 --per-chunk 2
 
-# Export to a mock quiz
-python scripts/export_quiz.py --questions-json questions.json --out-prefix data/processed/mock_quiz
-```
-
-## 🖥 Run the App
-```bash
+# 5) app
 streamlit run app/streamlit_app.py
-```
+
 Upload a PDF/TXT, (optionally) type a focus query, generate, and download your quiz.
 
 ## ⚙️ Configuration
